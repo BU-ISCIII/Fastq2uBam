@@ -45,13 +45,13 @@ function help {
 	echo ""
 	echo "Example of usage:"
 	echo "Fastq2uBam.sh myreads_R1.fastq.gz myreads_R2.fastq.gz myreads.bam"
-	echo "Fastq2uBam.sh myreads.fastq single-end myreads.bam "
+	echo "Fastq2uBam.sh myreads.fastq single-end myreads.bam"
 	echo ""
 	exit 1
 }
 
 # picard.jar location
-if [ ! -z "$PICARD" ]; then
+if [ -z "$PICARD" ]; then
 	echo "ERROR: \$PICARD was not declared. Please set \$PICARD to yout picard.jar file."
 	exit 1
 elif [ ! -f "$PICARD" ]; then
@@ -66,11 +66,11 @@ else
 	help
 fi
 
-if [ -f "$2" ]; then
+if [ "$2" == "single-end" ]; then
+	SE=true
+elif [ -f "$2" ]; then
 	file_R2="$2"
 	SE=false
-elif [ "$2" == "single-end" ]; then
-	SE=true
 else
 	help
 fi
