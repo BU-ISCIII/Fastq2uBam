@@ -58,6 +58,7 @@ for file in *.fastq.gz; do du -k "$file"; done
 
 # Uncompress computation time
 echo;
+echo "Uncompress time requirement:";
 for file in *.fastq.gz; do 
 	start=`date +%s`
 	gzip -d "$file"
@@ -68,6 +69,7 @@ done
 
 # Edit computation time
 echo;
+echo "Edit time requirement:";
 for file in *.fastq; do 
 	sample=${file%.fastq}
 	start=`date +%s`
@@ -128,6 +130,7 @@ done
 
 # Edit computation time
 echo;
+echo "Edit time requirement:";
 for file in *picard_R?.fastq; do 
 	sample=${file%.fastq}
 	start=`date +%s`
@@ -147,6 +150,7 @@ done
 
 # Compress computation time
 echo;
+echo "Compress time requirement:";
 for file in *picard_R?.fastq.perl; do 
 	start=`date +%s`
 	gzip "$file"
