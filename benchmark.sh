@@ -44,7 +44,7 @@ elif [ ! -f "$PICARD" ]; then
 fi
 
 # Move to working directory
-if [ -d "$1"]; then
+if [ -d "$1" ]; then
 	cd "$1"
 	echo "Benchmarking compression rate and time for pair end \"_R?.fastq.gz\" files inside $1."
 else
