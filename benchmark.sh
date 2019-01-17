@@ -57,6 +57,7 @@ echo "RAW fastq file sizes in bytes:";
 for file in *.fastq.gz; do du -k "$file"; done
 
 # Uncompress computation time
+echo;
 for file in *.fastq.gz; do 
 	start=`date +%s`
 	gzip -d "$file"
@@ -66,6 +67,7 @@ for file in *.fastq.gz; do
 done
 
 # Edit computation time
+echo;
 for file in *.fastq; do 
 	sample=${file%.fastq}
 	start=`date +%s`
@@ -125,6 +127,7 @@ for file_bam in *picard.bam; do
 done
 
 # Edit computation time
+echo;
 for file in *picard_R?.fastq; do 
 	sample=${file%.fastq}
 	start=`date +%s`
@@ -143,6 +146,7 @@ for file in *picard_R?.fastq; do
 done
 
 # Compress computation time
+echo;
 for file in *picard_R?.fastq.perl; do 
 	start=`date +%s`
 	gzip "$file"
