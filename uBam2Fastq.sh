@@ -32,6 +32,7 @@
 
 # Help
 function help {
+	echo ""
 	echo "This script takes an unaligned BAM file and transforms it to FASTQ format (either one single-end or two paired-end files)"
 	echo ""
 	echo "IMPORTANT: \$PICARD must be declared in your environment and pointing to the picard.jar file you want to use."
@@ -53,7 +54,7 @@ function help {
 
 # picard.jar location
 if [ -z "$PICARD" ]; then
-	echo "ERROR: \$PICARD was not declared. Please set \$PICARD to yout picard.jar file."
+	echo "ERROR: \$PICARD was not declared. Please set \$PICARD to yout picard.jar file and export the variable."
 	exit 1
 elif [ ! -f "$PICARD" ]; then
 	echo "ERROR: \$PICARD = $PICARD does not exist."
