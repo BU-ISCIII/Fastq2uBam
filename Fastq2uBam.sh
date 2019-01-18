@@ -98,27 +98,35 @@ fi
 if [ -x "$( command -v perl )" ] ; then
 	# Perl is faster than sed and awk
 	if [ "$compressd" = true ]; then
-		zcat "$file_R1" | perl -pe '/^@/ && s/\ /;/g' > tmp_R1
 		if [ ! "$SE" = true ]; then
-			zcat "$file_R2" | perl -pe '/^@/ && s/\ /;/g' > tmp_R2
+			zcat "$file_R1" | perl -pe '/^@/ && s/\ 1/;/g' > tmp_R1
+			zcat "$file_R2" | perl -pe '/^@/ && s/\ 2/;/g' > tmp_R2
+		else
+			zcat "$file_R1" | perl -pe '/^@/ && s/\ /;/g' > tmp_R1
 		fi
 	else
-		cat "$file_R1" | perl -pe '/^@/ && s/\ /;/g' > tmp_R1
 		if [ ! "$SE" = true ]; then
-			cat "$file_R2" | perl -pe '/^@/ && s/\ /;/g' > tmp_R2
+			cat "$file_R1" | perl -pe '/^@/ && s/\ 1/;/g' > tmp_R1
+			cat "$file_R2" | perl -pe '/^@/ && s/\ 2/;/g' > tmp_R2
+		else
+			cat "$file_R1" | perl -pe '/^@/ && s/\ /;/g' > tmp_R1
 		fi
 	fi
 else
 	# Use sed if perl is not in $PATH
 	if [ "$compressd" = true ]; then
-		zcat "$file_R1" | sed 's/\ /;/g' > tmp_R1
 		if [ ! "$SE" = true ]; then
-			zcat "$file_R2" | sed 's/\ /;/g' > tmp_R2
+			zcat "$file_R1" | sed 's/\ 1/;/g' > tmp_R1
+			zcat "$file_R2" | sed 's/\ 2/;/g' > tmp_R2
+		else
+			zcat "$file_R1" | sed 's/\ /;/g' > tmp_R1
 		fi
 	else
-		cat "$file_R1" | sed 's/\ /;/g' > tmp_R1
 		if [ ! "$SE" = true ]; then
-			cat "$file_R2" | sed 's/\ /;/g' > tmp_R2
+			cat "$file_R1" | sed 's/\ 1/;/g' > tmp_R1
+			cat "$file_R2" | sed 's/\ 2/;/g' > tmp_R2
+		else
+			cat "$file_R1" | sed 's/\ /;/g' > tmp_R1
 		fi
 	fi
 fi
