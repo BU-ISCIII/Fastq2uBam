@@ -19,7 +19,7 @@ git clone https://github.com/BU-ISCIII/Fastq2uBam.git
 This script takes FASTQ files (either one single-end or two paired-end files) and transforms them in an unaligned BAM 
 file.
 
-IMPORTANT: ´$PICARD´ must be declared in your environment and pointing to the picard.jar file you want to use.
+IMPORTANT: `$PICARD` must be declared in your environment and pointing to the picard.jar file you want to use.
 
 One FASTQ file must be inputed as argument for single-end mode and two (R1 and R2, in that order) for paired-end mode. For single-end mode, a second parameter "single-end" must be included.
 
@@ -30,17 +30,17 @@ If not specified, the resulting BAM file will be named as the first FASTQ file i
 Lack of necessary input or not found FASTQ file will lead to end of execution and display of the help message.
 
 Example of usage:
-´´´
+```
 Fastq2uBam.sh myreads_R1.fastq.gz myreads_R2.fastq.gz myreads.bam
 Fastq2uBam.sh myreads.fastq single-end myreads.bam
-´´´
+```
 
 
 ## uBam2Fastq.sh
 
 This script takes an unaligned BAM file and transforms it to FASTQ format (either one single-end or two paired-end files)
 
-IMPORTANT: ´$PICARD´ must be declared in your environment and pointing to the picard.jar file you want to use.
+IMPORTANT: `$PICARD` must be declared in your environment and pointing to the picard.jar file you want to use.
 
 One BAM file must be inputed as argument as long as the output for single-end mode and two (R1 and R2, in that order) for paired-end mode. For single-end mode, a second parameter "single-end" must be included.
 
@@ -51,20 +51,20 @@ If not specified, tha BAM file will be considered paired-end and the resulting F
 Lack of necessary input or not found BAM file will lead to end of execution and display of the help message.
 
 Example of usage:
-´´´
+```
 uBam2Fastq.sh myreads.bam myreads_R1.fastq.gz myreads_R2.fastq.gz
 uBam2Fastq.sh myreads.bam single-end myreads.fastq
-´´´
+```
 
 ## benchmark.sh
 
-This script is designed to benchmark the compression rate and computing time of the methods used in ´Fastq2uBam.sh´ and ´uBam2Fastq.sh´.
+This script is designed to benchmark the compression rate and computing time of the methods used in `Fastq2uBam.sh` and `uBam2Fastq.sh`.
 
 To execute it just pass as argument a folder with some paired-end Fastq files. All the computation will take place in the same folder, creating new files but without modifying the original ones.
 
 Output will be printed to stout. You can easily redirect to a file with ">".
 
 Example of usage:
-´´´
+```
 benchmark.sh /path/to/my/folder/with/fastqgzfiles/ > report.txt
-´´´
+```
