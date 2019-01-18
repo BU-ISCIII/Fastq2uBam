@@ -53,6 +53,7 @@ else
 fi
 
 # RAW size
+echo;
 echo "RAW fastq file sizes in bytes:";
 for file in *.fastq.gz; do du -k "$file"; done
 
@@ -81,7 +82,7 @@ for file in *.fastq; do
 	end=`date +%s`
 	runtime_perl_replacement=$((end-start))
 	start=`date +%s`
-	cat "$file" | perl -pe sed 's/\ /;/g' > ${sample}.fastq.sed
+	cat "$file" | sed 's/\ /;/g' > ${sample}.fastq.sed
 	end=`date +%s`
 	runtime_sed_replacement=$((end-start))
 	echo "$sample perl_replacement_full $runtime_perl_replacement_full perl_replacement $runtime_perl_replacement sed_replacement $runtime_sed_replacement";
@@ -89,11 +90,11 @@ done
 
 # Fastq2Bam computation time
 echo;
-echo "Mapping time requirement:";
+echo "Fastq2Bam time requirement:";
 for file_R1 in *_R1.fastq.perl; do
 	file_R1=${file_R1%.perl}
 	start=`date +%s`
-	file_R2=${file_R1%_R2.fastq}_R2.fastq
+	file_R2=${file_R1%_R1.fastq}_R2.fastq
 	file_bam=${file_R1%_R1.fastq}_picard.bam
 	sample=${file_R1%_R1.fastq}
 	java -jar "$PICARD" FastqToSam \
@@ -142,7 +143,7 @@ for file in *picard_R?.fastq; do
 	end=`date +%s`
 	runtime_perl_replacement=$((end-start))
 	start=`date +%s`
-	cat "$file" | perl -pe sed 's/;/\ /g' > ${sample}.fastq.sed
+	cat "$file" | sed 's/;/\ /g' > ${sample}.fastq.sed
 	end=`date +%s`
 	runtime_sed_replacement=$((end-start))
 	echo "$sample perl_replacement_full $runtime_perl_replacement_full perl_replacement $runtime_perl_replacement sed_replacement $runtime_sed_replacement";
