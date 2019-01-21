@@ -118,18 +118,18 @@ fi
 if [ -x "$( command -v perl )" ] ; then
 	# Perl is faster than sed and awk
 	if [ ! "$SE" = true ]; then
-		perl -i -pe '/^@/ && s/;/\ 1/g' "$file_R1"
-		perl -i -pe '/^@/ && s/;/\ 2/g' "$file_R2"
+		perl -i -pe '/^@/ && s/;/\ 1/g && s/\/\d$//g' "$file_R1"
+		perl -i -pe '/^@/ && s/;/\ 2/g && s/\/\d$//g' "$file_R2"
 	else
-		perl -i -pe '/^@/ && s/;/\ /g' "$file_R2"
+		perl -i -pe '/^@/ && s/;/\ /g && s/\/\d$//g' "$file_R2"
 	fi
 else
 	# Use sed if perl is not in $PATH
 	if [ ! "$SE" = true ]; then
-		sed -i 's/;/\ 1/g' "$file_R1"
-		sed -i 's/;/\ 2/g' > "$file_R2"
+		sed -i 's/;/\ 1/g' | sed 's/\/.$//g' "$file_R1"
+		sed -i 's/;/\ 2/g' | sed 's/\/.$//g' "$file_R2"
 	else
-		sed -i 's/;/\ /g' > "$file_R2"
+		sed -i 's/;/\ /g' | sed 's/\/.$//g' "$file_R2"
 	fi
 fi
 

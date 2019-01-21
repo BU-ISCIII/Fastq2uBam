@@ -89,9 +89,9 @@ for file in *.fastq; do
 done
 rm -rf *.fastq.perl_full *.fastq.sed
 
-# Fastq2Bam computation time
+# Fastq2uBam computation time
 echo;
-echo "Fastq2Bam time requirement:";
+echo "Fastq2uBam time requirement:";
 for file_R1 in *_R1.fastq.perl; do
 	start=`date +%s`
 	file_R2=${file_R1%_R1.fastq.perl}_R2.fastq.perl
@@ -113,9 +113,9 @@ echo;
 echo "BAM file sizes in bytes:";
 for file in *.bam; do du -k "$file"; done
 
-# Bam2Fastq computation time
+# uBam2Fastq computation time
 echo;
-echo "BAM2FQ time requirement:";
+echo "uBam2Fastq time requirement:";
 for file_bam in *picard.bam; do
 	start=`date +%s`
 	file_R1=${file_bam%.bam}_R1.fastq
@@ -135,20 +135,20 @@ echo;
 echo "Edit time requirement:";
 for file_R1 in *picard_R1.fastq; do
 	file_R2=${file_R1%_R1.fastq}_R2.fastq
-	sample=${file%.fastq}
+	sample=${file_R1%.fastq}
 	start=`date +%s`
-	cat "$file_R1" | perl -pe 's/;/\ 1/g' > ${sample}.fastq.perl_full
-	cat "$file_R2" | perl -pe 's/;/\ 2/g' > ${sample}.fastq.perl_full
+	cat "$file_R1" | perl -pe 's/;/\ 1/g && s/\/\d$//g' > ${file_R1}.perl_full
+	cat "$file_R2" | perl -pe 's/;/\ 2/g && s/\/\d$//g' > ${file_R2}.perl_full
 	end=`date +%s`
 	runtime_perl_replacement_full=$((end-start))
 	start=`date +%s`
-	cat "$file_R1" | perl -pe '/^@/ && s/;/\ 1/g' > ${sample}.fastq.perl
-	cat "$file_R2" | perl -pe '/^@/ && s/;/\ 2/g' > ${sample}.fastq.perl
+	cat "$file_R1" | perl -pe '/^@/ && s/;/\ 1/g && s/\/\d$//g' > ${file_R1}.perl
+	cat "$file_R2" | perl -pe '/^@/ && s/;/\ 2/g && s/\/\d$//g' > ${file_R2}.perl
 	end=`date +%s`
 	runtime_perl_replacement=$((end-start))
 	start=`date +%s`
-	cat "$file_R1" | sed 's/;/\ 1/g' > ${sample}.fastq.sed
-	cat "$file_R2" | sed 's/;/\ 2/g' > ${sample}.fastq.sed
+	cat "$file_R1" | sed 's/;/\ 1/g' | sed 's/\/.$//g' > ${file_R1}.sed
+	cat "$file_R2" | sed 's/;/\ 2/g' | sed 's/\/.$//g' > ${file_R2}.sed
 	end=`date +%s`
 	runtime_sed_replacement=$((end-start))
 	echo "$sample perl_replacement_full $runtime_perl_replacement_full perl_replacement $runtime_perl_replacement sed_replacement $runtime_sed_replacement";
