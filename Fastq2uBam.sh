@@ -95,8 +95,8 @@ else
 	file_bam="${path_bam}/${sample}.bam"
 fi
 
-tmp_R1=tmp_${file_R1}
-tmp_R2=tmp_${file_R2}
+tmp_R1=tmp_${file_R1%.gz}
+tmp_R2=tmp_${file_R2%.gz}
 
 # Modify @SEQ_ID lines so no info is lost
 if [ -x "$( command -v perl )" ] ; then
