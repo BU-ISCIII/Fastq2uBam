@@ -91,8 +91,12 @@ sample="${file_R1%_R1*}"
 if [ ! -z "$3" ]; then
 	file_bam="$3"
 else
-	path_bam="${file_R1%/*}"
-	file_bam="${path_bam}/${sample}.bam"
+	if echo "$file_R1" | grep -q "/"; then
+		path_bam="${file_R1%/*}/"
+	else
+		path_bam="/"
+	fi
+	file_bam="${path_bam}${sample}.bam"
 fi
 
 tmp_R1=tmp_${file_R1%.gz}

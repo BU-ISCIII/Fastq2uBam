@@ -72,28 +72,32 @@ sample="${file_bam%.bam}"
 
 if [ "$2" == "single-end" ]; then
 	SE=true
-elif [ -z "$2" ]; then
-	path_bam="${file_bam%/*}"
-	file_R1="${path_bam}/${sample}_R1.fastq.gz"
-	SE=false
-elif [ -f "$2" ]; then
+elif [ ! -z "$2" ]; then
 	file_R1="$2"
 	SE=false
 else
-	help
+	path_bam="${file_bam%/*}"
+	file_R1="${path_bam}/${sample}_R1.fastq.gz"
+	SE=false	
 fi
 
-if [ -z "$3" ]; then
-	path_bam="${file_bam%/*}"
-	if [ "$SE" = true ]; then
-		file_R2="${path_bam}/${sample}.fastq.gz"
-	else
-		file_R2="${path_bam}/${sample}_R2.fastq.gz"
-	fi
-elif [ -f "$3" ]; then
+if [ ! -z "$3" ]; then
 	file_R2="$3"
 else
-	help
+	if echo "$file_bam" | grep -q "/"; then
+		path_bam="${file_bam%/*}/"
+	else
+		path_bam="/"
+	fi
+	if [ "$SE" = true ]; then
+		file_R2="${path_bam}${sample}.fastq.gz"
+	else
+		if [ ! -z "$2" ]; then
+			file_R2="${file_R1/R1/R2}"
+		else
+			file_R2="${path_bam}/${sample}_R2.fastq.gz"
+		fi
+	fi
 fi
 
 if echo "$file_R2" | grep -q ".gz"; then
@@ -106,11 +110,11 @@ fi
 if [ "$SE" = true ]; then
 	java -jar "$PICARD" SamToFastq \
 		I="$file_bam" \
-		FASTQ="$file_R2"
+		F="$file_R2"
 else
 	java -jar "$PICARD" SamToFastq \
      	I="$file_bam" \
-     	F1="$file_R1" \
+     	F="$file_R1" \
      	F2="$file_R2"
 fi
 
