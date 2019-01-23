@@ -102,6 +102,10 @@ fi
 
 if echo "$file_R2" | grep -q ".gz"; then
 	compressed=true
+	file_R2="${file_R2%.gz}"
+	if [ ! "$SE" = true ]; then
+		file_R1="${file_R1%.gz}"
+	fi
 else
 	compressed=false
 fi
@@ -139,10 +143,8 @@ fi
 
 # Compress
 if [ "$compressed" = true ]; then
-	mv $file_R2 ${file_R2%.gz}
-	gzip ${file_R2%.gz}
+	gzip "$file_R2"
 	if [ ! "$SE" = true ]; then
-		mv $file_R1 ${file_R1%.gz}
-		gzip ${file_R1%.gz}
+		gzip "$file_R1"
 	fi
 fi
