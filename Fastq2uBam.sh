@@ -45,8 +45,14 @@ function help {
     echo "Lack of necessary input or not found FASTQ file will lead to end of execution and display of the help message."
     echo ""
     echo "Example of usage:"
-    echo "Fastq2uBam.sh myreads_R1.fastq.gz myreads_R2.fastq.gz myreads.bam"
+    echo "Fastq2uBam.sh myreads_R1.fastq.gz myreads_R2.fastq.gz myreads.bam --PLATFORM=ILLUMINA --SEQUENCING_CENTER=ISCIII"
     echo "Fastq2uBam.sh myreads.fastq single-end myreads.bam"
+    echo ""
+    echo "Optional arguments: Any other optional arguments for piccard can be added, just need to be written in format"
+    echo "    --ARGUMENT=VALUE or -ARG=VALUE"
+    echo ""
+    echo "Full list of available optional argumentes here:"
+    echo "https://software.broadinstitute.org/gatk/documentation/tooldocs/4.0.5.1/picard_sam_FastqToSam.php"
     echo ""
     exit 1
 }
@@ -101,6 +107,15 @@ fi
 tmp_R1=tmp_${file_R1%.gz}
 tmp_R2=tmp_${file_R2%.gz}
 
+picard_args=""
+for arg in "$@"; do
+    if echo "$arg" | grep -q "-"; then
+    	arg=${arg#-}
+        picard_args="$picard_args ${arg#-}"
+    fi
+done
+
+
 # Modify @SEQ_ID lines so no info is lost
 if [ -x "$( command -v perl )" ] ; then
     # Perl is faster under some cirumstances and, in this case, preciser than sed and awk
@@ -144,14 +159,14 @@ if [ "$SE" = true ]; then
         FASTQ="$tmp_R1" \
         O="$file_bam" \
         SM="$sample" \
-        || exit 1
+        "$picard_args" || exit 1
 else
     java -jar "$PICARD" FastqToSam \
         F1="$tmp_R1" \
         F2="$tmp_R2" \
         O="$file_bam" \
         SM="$sample" \
-        || exit 1
+        "$picard_args" || exit 1
 fi
 
 # Clean tmp files
