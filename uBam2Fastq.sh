@@ -8,17 +8,17 @@
 # IMPORTANT: $PICARD must be declared in your environment and
 # pointing to the picard.jar file you want to use.
 #
-# One BAM file must be inputed as argument as long as the output 
-# for single-end mode and two (R1 and R2, in that order) for 
-# paired-end mode. For single-end mode, a second parameter 
+# One BAM file must be inputed as argument as long as the output
+# for single-end mode and two (R1 and R2, in that order) for
+# paired-end mode. For single-end mode, a second parameter
 # "single-end" must be included.
 #
-# Output files will be compressed with gzip if specified in their 
+# Output files will be compressed with gzip if specified in their
 # file extension with ".fastq.gz".
 #
 # If not specified, tha BAM file will be considered paired-end and
-# the resulting FASTQ files will be named as the BAM file inputed 
-# in the program, without the file extension ".bam". The files 
+# the resulting FASTQ files will be named as the BAM file inputed
+# in the program, without the file extension ".bam". The files
 # will be written in the same folder where the input BAM file is.
 #
 # Lack of necessary input or not found BAM file will lead to end
@@ -26,7 +26,7 @@
 #
 # Example of usage:
 # uBam2Fastq.sh myreads.bam myreads_R1.fastq.gz myreads_R2.fastq.gz
-# uBam2Fastq.sh myreads.bam myreads.fastq single-end 
+# uBam2Fastq.sh myreads.bam myreads.fastq single-end
 #
 ###################################################################
 
@@ -78,7 +78,7 @@ elif [ ! -z "$2" ]; then
 else
     path_bam="${file_bam%/*}"
     file_R1="${path_bam}/${sample}_R1.fastq.gz"
-    SE=false    
+    SE=false
 fi
 
 if [ ! -z "$3" ]; then
@@ -114,37 +114,39 @@ fi
 if [ "$SE" = true ]; then
     java -jar "$PICARD" SamToFastq \
         I="$file_bam" \
-        F="$file_R2"
+        F="$file_R2" \
+        || exit 1
 else
     java -jar "$PICARD" SamToFastq \
          I="$file_bam" \
          F="$file_R1" \
-         F2="$file_R2"
+         F2="$file_R2" \
+         || exit 1
 fi
 
 # Modify @SEQ_ID lines so no info is lost
 if [ -x "$( command -v perl )" ] ; then
     # Perl is faster than sed and awk
     if [ ! "$SE" = true ]; then
-        perl -i -pe '/^@/ && s/;/\ 1/g && s/\/\d$//g' "$file_R1"
-        perl -i -pe '/^@/ && s/;/\ 2/g && s/\/\d$//g' "$file_R2"
+        perl -i -pe '/^@/ && s/;/\ 1/g && s/\/\d$//g' "$file_R1" || exit 1
+        perl -i -pe '/^@/ && s/;/\ 2/g && s/\/\d$//g' "$file_R2" || exit 1
     else
-        perl -i -pe '/^@/ && s/;/\ /g && s/\/\d$//g' "$file_R2"
+        perl -i -pe '/^@/ && s/;/\ /g && s/\/\d$//g' "$file_R2" || exit 1
     fi
 else
     # Use sed if perl is not in $PATH
     if [ ! "$SE" = true ]; then
-        sed -i 's/;/\ 1/g' | sed 's/\/.$//g' "$file_R1"
-        sed -i 's/;/\ 2/g' | sed 's/\/.$//g' "$file_R2"
+        sed -i 's/;/\ 1/g' | sed 's/\/.$//g' "$file_R1" || exit 1
+        sed -i 's/;/\ 2/g' | sed 's/\/.$//g' "$file_R2" || exit 1
     else
-        sed -i 's/;/\ /g' | sed 's/\/.$//g' "$file_R2"
+        sed -i 's/;/\ /g' | sed 's/\/.$//g' "$file_R2" || exit 1
     fi
 fi
 
 # Compress
 if [ "$compressed" = true ]; then
-    gzip "$file_R2"
+    gzip "$file_R2" || exit 1
     if [ ! "$SE" = true ]; then
-        gzip "$file_R1"
+        gzip "$file_R1" || exit 1
     fi
 fi

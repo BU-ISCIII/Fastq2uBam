@@ -85,7 +85,6 @@ else
 fi
 
 sample="${file_R1%.fastq}"
-
 sample="${file_R1%_R1*}"
 
 if [ ! -z "$3" ]; then
@@ -104,37 +103,37 @@ tmp_R2=tmp_${file_R2%.gz}
 
 # Modify @SEQ_ID lines so no info is lost
 if [ -x "$( command -v perl )" ] ; then
-    # Perl is faster than sed and awk
+    # Perl is faster under some cirumstances and, in this case, preciser than sed and awk
     if [ "$compressed" = true ]; then
         if [ ! "$SE" = true ]; then
-            zcat "$file_R1" | perl -pe '/^@/ && s/\ 1/;/g' > "$tmp_R1"
-            zcat "$file_R2" | perl -pe '/^@/ && s/\ 2/;/g' > "$tmp_R2"
+            zcat "$file_R1" | perl -pe '/^@/ && s/\ 1/;/g' > "$tmp_R1" || exit 1
+            zcat "$file_R2" | perl -pe '/^@/ && s/\ 2/;/g' > "$tmp_R2" || exit 1
         else
-            zcat "$file_R1" | perl -pe '/^@/ && s/\ /;/g' > "$tmp_R1"
+            zcat "$file_R1" | perl -pe '/^@/ && s/\ /;/g' > "$tmp_R1" || exit 1
         fi
     else
         if [ ! "$SE" = true ]; then
-            cat "$file_R1" | perl -pe '/^@/ && s/\ 1/;/g' > "$tmp_R1"
-            cat "$file_R2" | perl -pe '/^@/ && s/\ 2/;/g' > "$tmp_R2"
+            cat "$file_R1" | perl -pe '/^@/ && s/\ 1/;/g' > "$tmp_R1" || exit 1
+            cat "$file_R2" | perl -pe '/^@/ && s/\ 2/;/g' > "$tmp_R2" || exit 1
         else
-            cat "$file_R1" | perl -pe '/^@/ && s/\ /;/g' > "$tmp_R1"
+            cat "$file_R1" | perl -pe '/^@/ && s/\ /;/g' > "$tmp_R1" || exit 1
         fi
     fi
 else
     # Use sed if perl is not in $PATH
     if [ "$compressed" = true ]; then
         if [ ! "$SE" = true ]; then
-            zcat "$file_R1" | sed 's/\ 1/;/g' > "$tmp_R1"
-            zcat "$file_R2" | sed 's/\ 2/;/g' > "$tmp_R2"
+            zcat "$file_R1" | sed 's/\ 1/;/g' > "$tmp_R1" || exit 1
+            zcat "$file_R2" | sed 's/\ 2/;/g' > "$tmp_R2" || exit 1
         else
-            zcat "$file_R1" | sed 's/\ /;/g' > "$tmp_R1"
+            zcat "$file_R1" | sed 's/\ /;/g' > "$tmp_R1" || exit 1
         fi
     else
         if [ ! "$SE" = true ]; then
-            cat "$file_R1" | sed 's/\ 1/;/g' > "$tmp_R1"
-            cat "$file_R2" | sed 's/\ 2/;/g' > "$tmp_R2"
+            cat "$file_R1" | sed 's/\ 1/;/g' > "$tmp_R1" || exit 1
+            cat "$file_R2" | sed 's/\ 2/;/g' > "$tmp_R2" || exit 1
         else
-            cat "$file_R1" | sed 's/\ /;/g' > "$tmp_R1"
+            cat "$file_R1" | sed 's/\ /;/g' > "$tmp_R1" || exit 1
         fi
     fi
 fi
@@ -144,14 +143,16 @@ if [ "$SE" = true ]; then
     java -jar "$PICARD" FastqToSam \
         FASTQ="$tmp_R1" \
         O="$file_bam" \
-        SM="$sample"
+        SM="$sample" \
+        || exit 1
 else
     java -jar "$PICARD" FastqToSam \
         F1="$tmp_R1" \
         F2="$tmp_R2" \
         O="$file_bam" \
-        SM="$sample"
+        SM="$sample" \
+        || exit 1
 fi
 
 # Clean tmp files
-rm -rf "$tmp_R1" "$tmp_R2"
+rm -rf "$tmp_R1" "$tmp_R2"  || exit 1
