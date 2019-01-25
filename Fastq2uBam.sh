@@ -24,8 +24,15 @@
 # end of execution and display of the help message.
 #
 # Example of usage:
-# Fastq2uBam.sh myreads_R1.fastq.gz myreads_R2.fastq.gz myreads.bam
+# Fastq2uBam.sh myreads_R1.fastq.gz myreads_R2.fastq.gz myreads.bam --PLATFORM=ILLUMINA --SEQUENCING_CENTER=ISCIII
 # Fastq2uBam.sh myreads.fastq single-end myreads.bam
+#
+# Optional arguments: Any other optional arguments for piccard can
+# be added, just need to be written in format
+#     --ARGUMENT=VALUE or -ARG=VALUE
+#
+# Full list of available optional argumentes here:
+# https://software.broadinstitute.org/gatk/documentation/tooldocs/4.0.5.1/picard_sam_FastqToSam.php
 #
 ###################################################################
 

@@ -28,6 +28,13 @@
 # uBam2Fastq.sh myreads.bam myreads_R1.fastq.gz myreads_R2.fastq.gz
 # uBam2Fastq.sh myreads.bam myreads.fastq single-end
 #
+# Optional arguments: Any other optional arguments for piccard can
+# be added, just need to be written in format
+#     --ARGUMENT=VALUE or -ARG=VALUE
+#
+# Full list of available optional argumentes here:
+# https://software.broadinstitute.org/gatk/documentation/tooldocs/4.0.5.1/picard_sam_FastqToSam.php
+#
 ###################################################################
 
 # Help
