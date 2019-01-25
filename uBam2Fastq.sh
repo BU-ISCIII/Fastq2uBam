@@ -56,12 +56,6 @@ function help {
     echo "uBam2Fastq.sh myreads.bam myreads_R1.fastq.gz myreads_R2.fastq.gz"
     echo "uBam2Fastq.sh myreads.bam single-end myreads.fastq"
     echo ""
-    echo "Optional arguments: Any other optional arguments for piccard can be added, just need to be written in format"
-    echo "    --ARGUMENT=VALUE or -ARG=VALUE"
-    echo ""
-    echo "Full list of available optional argumentes here:"
-    echo "https://software.broadinstitute.org/gatk/documentation/tooldocs/4.0.5.1/picard_sam_FastqToSam.php"
-    echo ""
     exit 1
 }
 
@@ -123,26 +117,18 @@ else
     compressed=false
 fi
 
-picard_args=""
-for arg in "$@"; do
-    if echo "$arg" | grep -q "-"; then
-    	arg=${arg#-}
-        picard_args="$picard_args ${arg#-}"
-    fi
-done
-
 # Transform to FASTQ
 if [ "$SE" = true ]; then
     java -jar "$PICARD" SamToFastq \
         I="$file_bam" \
         F="$file_R2" \
-        "$picard_args" || exit 1
+        || exit 1
 else
     java -jar "$PICARD" SamToFastq \
          I="$file_bam" \
          F="$file_R1" \
          F2="$file_R2" \
-         "$picard_args" || exit 1
+         || exit 1
 fi
 
 # Modify @SEQ_ID lines so no info is lost
