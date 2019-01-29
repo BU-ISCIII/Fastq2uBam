@@ -21,16 +21,18 @@
 
 # Help
 function help {
-    echo ""
-    echo "This script is designed to benchmark the compression rate and computing time of the methods used in Fastq2uBam.sh and  uBam2Fastq.sh."
-    echo ""
-    echo "To execute it just pass as argument a folder with some paired-end Fastq files. All the computation will take place in the same folder, creating new files but without modifying the original ones."
-    echo ""
-    echo "Output will be printed to stout. You can easily redirect to a file with \">\"."
-    echo ""
-    echo "Example of usage:"
-    echo "benchmark.sh /path/to/my/folder/with/fastqgzfiles/ > report.txt"
-    echo ""
+    cat << EOF
+    
+    This script is designed to benchmark the compression rate and computing time of the methods used in Fastq2uBam.sh and  uBam2Fastq.sh.
+    
+    To execute it just pass as argument a folder with some paired-end Fastq files. All the computation will take place in the same folder, creating new files but without modifying the original ones.
+    
+    Output will be printed to stout. You can easily redirect to a file with ">".
+    
+    Example of usage:
+    benchmark.sh /path/to/my/folder/with/fastqgzfiles/ > report.txt
+    
+EOF
     exit 1
 }
 #
