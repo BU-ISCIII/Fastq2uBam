@@ -18,7 +18,7 @@ git clone https://github.com/BU-ISCIII/Fastq2uBam.git
 
 This script takes FASTQ files (either one single-end or two paired-end files) and transforms them in an unaligned BAM file.
     
-IMPORTANT: \$PICARD must be declared in your environment and pointing to the picard.jar file you want to use.
+IMPORTANT: $PICARD must be declared in your environment and pointing to the picard.jar file you want to use.
     
 One FASTQ file must be inputed as argument for single-end mode and two (R1 and R2, in that order) for paired-end mode. For single-end mode, a second parameter "single-end" must be included.
     
@@ -29,11 +29,15 @@ If not specified, the resulting BAM file will be named as the first FASTQ file i
 Lack of necessary input or not found FASTQ file will lead to end of execution and display of the help message.
     
 Example of usage:
-    Fastq2uBam.sh -1 myreads_R1.fastq.gz -2 myreads_R2.fastq.gz -o myreads.bam --PLATFORM ILLUMINA --SEQUENCING_CENTER ISCIII
-    Fastq2uBam.sh -1 myreads.fastq -2 single-end -o myreads.bam
+```
+Fastq2uBam.sh -1 myreads_R1.fastq.gz -2 myreads_R2.fastq.gz -o myreads.bam --PLATFORM ILLUMINA --SEQUENCING_CENTER ISCIII
+Fastq2uBam.sh -1 myreads.fastq -2 single-end -o myreads.bam
+```
     
 Optional arguments: Any other optional arguments for piccard can be added, just need to be written in format
-    "--ARGUMENT VALUE" or "-ARG VALUE"
+```
+"--ARGUMENT VALUE" or "-ARG VALUE"
+```
 depending it you want to use the log or short name of the parameter.
     
 Full list of available optional argumentes here:
@@ -54,11 +58,15 @@ If not specified, tha BAM file will be considered paired-end and the resulting F
 Lack of necessary input or not found BAM file will lead to end of execution and display of the help message.
     
 Example of usage:
-    uBam2Fastq.sh -i myreads.bam -1 myreads_R1.fastq.gz -2 myreads_R2.fastq.gz
-    uBam2Fastq.sh -i myreads.bam -1 single-end -2 myreads.fastq
-    
+```
+uBam2Fastq.sh -i myreads.bam -1 myreads_R1.fastq.gz -2 myreads_R2.fastq.gz
+uBam2Fastq.sh -i myreads.bam -1 single-end -2 myreads.fastq
+```
+
 Optional arguments: Any other optional arguments for piccard can be added, just need to be written in format
-    "--ARGUMENT VALUE" or "-ARG VALUE"
+```
+--ARGUMENT VALUE" or "-ARG VALUE"
+```
  depending it you want to use the log or short name of the parameter.
     
  Full list of available optional argumentes here:
